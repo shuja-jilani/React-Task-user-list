@@ -8,6 +8,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useContext } from 'react'
 import UserContext from '../context/Users/userContext'
 import { useState } from "react";
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+
 
 export default function ButtonAdd() {
   const [open, setOpen] = React.useState(false);
@@ -30,14 +35,26 @@ export default function ButtonAdd() {
   const onChange = (e) => {
     setUser({...user, [e.target.name]:e.target.value})
   };
-
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
 
   return (
     <div className="">
       <div>
-        <Button variant="contained" onClick={handleClickOpen}>
+      <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          
+          <Item><Button variant="contained" onClick={handleClickOpen}>
           Add New User
-        </Button>
+        </Button></Item>
+        </Grid>
+        
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Enter your details</DialogTitle>
           <DialogContent>
@@ -73,6 +90,8 @@ export default function ButtonAdd() {
             </Button>
           </DialogActions>
         </Dialog>
+        </Grid>
+    </Box>
       </div>
     </div>
   );
