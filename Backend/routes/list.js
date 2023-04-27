@@ -17,6 +17,7 @@ router.post("/createuser", async (req, res) => {
   user.save();
 
   res.json(user);
+  
 });
 
 //get all the users
@@ -28,42 +29,49 @@ router.get("/getallusers", async (req, res) => {
 //update user
 router.put("/updateuser/:id", async (req, res) => {
   const { name, surname } = req.body;
-  //new user
-  const newUser = {};
-  if (name) {
-    newUser.name = name;
-  }
-  if (surname) {
-    newUser.surname = surname;
-  }
-  //find the user to be updated and update it
-  let user = await Users.findById(req.params.id);
-  if (!user) {
-    res.status(404).send("Not found");
-  }
+  try {
+    //new user
+    const newUser = {};
+    if (name) {
+      newUser.name = name;
+    }
+    if (surname) {
+      newUser.surname = surname;
+    }
+    //find the user to be updated and update it
+    let user = await Users.findById(req.params.id);
+    if (!user) {
+      res.status(404).send("Not found");
+    }
 
-  user = await Users.findByIdAndUpdate(
-    req.params.id,
-    { $set: newUser },
-    { new: true }
-  );
-
-  res.json(user);
+    user = await Users.findByIdAndUpdate(
+      req.params.id,
+      { $set: newUser },
+      { new: true }
+    );
+    res.json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server error");
+  }
 });
 
 //delete user
 router.delete("/deleteuser/:id", async (req, res) => {
-  // const{name,surname} = req.body;
+  try {
+    //find the user to be dleted and delete it
+    let user = await Users.findById(req.params.id);
+    if (!user) {
+      res.status(404).send("Not found");
+    }
 
-  //find the user to be dleted and delete it
-  let user = await Users.findById(req.params.id);
-  if (!user) {
-    res.status(404).send("Not found");
+    user = await Users.findByIdAndDelete(req.params.id);
+
+    res.json({ Success: "User has been deleted", user: user });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server error");
   }
-
-  user = await Users.findByIdAndDelete(req.params.id);
-
-  res.json({ Success: "User has been deleted", user: user });
 });
 
 module.exports = router;

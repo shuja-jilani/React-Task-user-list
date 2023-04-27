@@ -9,7 +9,7 @@ function App() {
     <>
     <UserState>
       <ButtonAdd />
-      <List/>
+      <List />
       </UserState>
     </>
   );
